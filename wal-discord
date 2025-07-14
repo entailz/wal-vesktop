@@ -4,13 +4,10 @@
 # https://github.com/Sweets
 
 CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
-CONF_DIR="${CONFIG_HOME}/wal-discord"
-OUT_DIR="${HOME}/.cache/wal-discord"
+CONF_DIR="${CONFIG_HOME}/wal-vesktop"
+OUT_DIR="${HOME}/.cache/wal-vesktop"
 COLORS_FILE="${HOME}/.cache/wal/colors.scss"
-# generate Vesktop theme
 VESKTOP_THEME=false
-VESKTOP_THEME_HEADER='//META{"name":"wal-discord","description":"Generated based on pywal colors","author":"wal-discord","version":"1.0"}*//'
-# generate firefox userContent.css
 FIREFOX_CSS=false
 backend=""
 out_file="${OUT_DIR}/style.css"
@@ -18,7 +15,7 @@ version="0.0.1"
 
 usage() {
 	printf "%s\\n" "\
-    wal-discord - generate custom discord css files based on pywal colors
+    wal-vesktop - generate custom discord css files based on pywal colors
         -h  Display this help.
         -s  Output result to stdout.
         -b  Select backend to use.
@@ -28,7 +25,7 @@ usage() {
         -o  Set output file. Defaults to $out_file
         -t  Generate Vesktop theme.
         -x  Generate firefox userContent.css
-        -u  Forces wal-discord update.\
+        -u  Forces wal-vesktop update.\
         "
 	exit 0
 }
@@ -60,15 +57,19 @@ setup() {
 	[[ -L "$exec_path" ]] && exec_path="$(readlink "$0")"
 	local repo_dir
 	repo_dir="$(dirname "$exec_path")"
+
+	repo_dir="$(cd "$repo_dir" && pwd)"
+
 	[[ ! -d "${repo_dir}/config" ]] && {
-		printf "%s\\n" "Can't find needed setup folder: ${repo_dir/config/}"
+		printf "%s\\n" "Can't find needed setup folder: ${repo_dir}/config"
 		exit 1
 	}
 	mkdir -p "$CONF_DIR"
+
 	ln -sf "${repo_dir}/config/"* "$CONF_DIR"
-	# symlinks are relative, so "backends/wal.scss" actually refers to the backends folder in ${CONF_DIR}
 	ln -sf backends/wal.scss "${CONF_DIR}/backend.scss"
 	ln -sf "$COLORS_FILE" "${CONF_DIR}/colors.scss"
+	ls -la "$CONF_DIR"
 }
 
 generate_firefox_css() {
@@ -126,7 +127,6 @@ main() {
 	result="$(sassc -t expanded -I "$CONF_DIR" -s <<<"$master")"
 
 	[[ $VESKTOP_THEME = true ]] && {
-		result="$(printf "${VESKTOP_THEME_HEADER}\\n%s" "$result")"
 		[[ "$out_file" == "${OUT_DIR}/style.css" && -d "${CONFIG_HOME}/vesktop/themes/" ]] && {
 			out_file="${CONFIG_HOME}/vesktop/themes/wal_discord.theme.css"
 		}
