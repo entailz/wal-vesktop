@@ -6,7 +6,7 @@
 
 @import "backend.scss";
 @import "font";
-/* @import "hidechannel.scss"; */
+@import "hidechannel.scss";
 
 :root {
   --version: "2.3.0";
@@ -1177,7 +1177,7 @@ s {
   font-style: inherit;
 
   font-size: 100%;
-  color: $color14 !important;
+  color: $color6 !important;
   vertical-align: baseline;
   font-weight: 300;
   // text-shadow: $color1 0 0 4px, $color2 0 0 1px, $color5 0 0 1px;

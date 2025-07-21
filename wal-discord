@@ -6,7 +6,7 @@
 CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 CONF_DIR="${CONFIG_HOME}/wal-vesktop"
 OUT_DIR="${HOME}/.cache/wal-vesktop"
-COLORS_FILE="${HOME}/.cache/wal/colors.scss"
+COLORS_FILE="${HOME}/.cache/walrus/colors.scss"
 VESKTOP_THEME=false
 FIREFOX_CSS=false
 backend=""
@@ -128,7 +128,7 @@ main() {
 
 	[[ $VESKTOP_THEME = true ]] && {
 		[[ "$out_file" == "${OUT_DIR}/style.css" && -d "${CONFIG_HOME}/vesktop/themes/" ]] && {
-			out_file="${CONFIG_HOME}/vesktop/themes/wal_discord.theme.css"
+			out_file="${CONFIG_HOME}/vesktop/themes/wal_thorn.theme.css"
 		}
 	}
 
