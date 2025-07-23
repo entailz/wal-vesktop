@@ -34,11 +34,6 @@
   border-radius: 10px;
 }
 
-/* .chatContent_f75fb0 { */
-/**/
-/*   background-color: rgba(mix($color0, $color6, 90%), 0.8) !important; */
-/* } */
-
 .popoutContainer__0f481 {
   background-color: mix($color0, $color6, 90%) !important;
   border-radius: 10px;
@@ -77,20 +72,10 @@
 
 .visual-refresh.theme-darker,
 .visual-refresh .theme-darker {
-  /* --bg-base-tertiary: rgba(30, 30, 30, 0.4) !important; */
   --bg-base-tertiary: transparent !important;
-  /* --background-primary: rgba(30, 30, 30, 0.4) !important; */
   --background-primary: transparent !important;
   --background-secondary: rgba(30, 30, 30, 0.4) !important;
-  /* --background-tertiary: transparent !important; */
-  /* --background-tertiary: rgba(30, 30, 30, 0.4) !important; */
-  /* --bg-base-primary: rgba(30, 30, 30, 0.4) !important; */
-  /* --bg-base-secondary: rgba(30, 30, 30, 0.4) !important; */
-  /* --background-surface-high: rgba(30, 30, 30, 0.4) !important; */
-  /* --background-surface-higher: rgba(30, 30, 30, 0.4) !important; */
-  /* --background-surface-highest: rgba(30, 30, 30, 0.4) !important; */
   --background-surface-highest: transparent !important;
-  /* --background-base-low: rgba(30, 30, 30, 0.4) !important; */
   --background-base-low: transparent !important;
   --background-base-lower: transparent !important;
   --background-base-lowest: transparent !important;
@@ -105,14 +90,6 @@
 .recentMentionsPopout__95796 {
   background-color: mix($color0, $color6, 90%) !important;
 }
-
-/* .chatContent_f75fb0 { */
-/*   background-color: mix($color0, $color6, 90%) !important; */
-/* } */
-
-/* .theme-dark .themed__9293f { */
-/*   background-color: mix($color0, $color6, 90%) !important; */
-/* } */
 
 .messages-3amgkR {
   background-color: $bg !important;
@@ -1049,22 +1026,7 @@ body {
   color: rgba($syntaxOne, 0.7) !important;
 }
 
-/* .username_ec86aa { */
-/*   background-color: mix($color0, $color11, 80%); */
-/*   border-radius: 5px; */
-/*   padding: 3px; */
-/*   font-family: Rubik !important; */
-/*   color: $color12 !important; */
-/*   // border-bottom-right-radius: 10px; */
-/*   // border-bottom-left-radius: 10px; */
-/*   // padding-bottom: 3px; */
-/*   // padding-left: 5px; */
-/*   // padding-right: 5px; */
-/* } */
 
-// users
-// .username-h_Y3Us {
-// }
 .icon-2W8DHg {
   display: none;
 }
@@ -1390,14 +1352,6 @@ div.contentWrapper_e0bb2c {
   background-color: mix($color0, $color6, 90%);
 }
 
-// message-username-1166843237848338513
-/* .username_d30d99 { */
-/*   background-color: mix($color0, $color7, 90%); */
-/*   border-bottom-right-radius: 50px; */
-/*   padding: 3px; */
-/*   font-family: Rubik !important; */
-/*   color: $color12 !important; */
-/* } */
 
 .wrapper__66cd5 {
   background-color: mix($color0, $color6, 90%);
@@ -1459,6 +1413,7 @@ div.reactionTooltip__9384a {
   color: $color0 !important;
 }
 
+// username bubble
 .cozy_c19a55 .headerText_c19a55 {
   background-color: mix($color0, $color6, 70%) !important;
   border-radius: 5px;
@@ -1479,7 +1434,7 @@ div.reactionTooltip__9384a {
 
 // block around focused images
 .focusLock_f9a4c9 {
-  border-radius: 5px;
+  borderradius: 5px;
   background-color: transparent !important;
 }
 
@@ -1523,15 +1478,6 @@ div.reactionTooltip__9384a {
 
 .wrapper_ef319f {
   background-color: mix($color9, $color0, 10%) !important;
-}
-
-.username_f9f2ca {
-  background-color: mix($color0, $color11, 75%) !important;
-  border-radius: 5px;
-  padding: 3px;
-  font-size: 13px !important;
-  font-family: Rubik !important;
-  color: $color12 !important;
 }
 
 .header_b385c8 {

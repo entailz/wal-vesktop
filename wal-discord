@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-#
+
 # thanks to Sweets from which I copied some function
 # https://github.com/Sweets
-
 CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 CONF_DIR="${CONFIG_HOME}/wal-vesktop"
 OUT_DIR="${HOME}/.cache/wal-vesktop"
 COLORS_FILE="${HOME}/.cache/walrus/colors.scss"
 VESKTOP_THEME=false
+FLATPAK_VESKTOP=false
 FIREFOX_CSS=false
 backend=""
 out_file="${OUT_DIR}/style.css"
 version="0.0.1"
-
 usage() {
 	printf "%s\\n" "\
     wal-vesktop - generate custom discord css files based on pywal colors
@@ -24,12 +23,12 @@ usage() {
             Default is 'wal'.
         -o  Set output file. Defaults to $out_file
         -t  Generate Vesktop theme.
+        -f  Generate Flatpak Vesktop theme.
         -x  Generate firefox userContent.css
         -u  Forces wal-vesktop update.\
         "
 	exit 0
 }
-
 version() {
 	local css_version
 	css_version="not found"
@@ -43,7 +42,6 @@ version() {
     "
 	exit 0
 }
-
 set_backend() {
 	[[ ! -r "${CONF_DIR}/backends/${1}.scss" ]] && {
 		printf "%s\\n" "Can't find backend $1"
@@ -51,46 +49,37 @@ set_backend() {
 	}
 	backend="$1"
 }
-
 setup() {
 	local exec_path="$0"
 	[[ -L "$exec_path" ]] && exec_path="$(readlink "$0")"
 	local repo_dir
 	repo_dir="$(dirname "$exec_path")"
-
 	repo_dir="$(cd "$repo_dir" && pwd)"
-
 	[[ ! -d "${repo_dir}/config" ]] && {
 		printf "%s\\n" "Can't find needed setup folder: ${repo_dir}/config"
 		exit 1
 	}
 	mkdir -p "$CONF_DIR"
-
 	ln -sf "${repo_dir}/config/"* "$CONF_DIR"
 	ln -sf backends/wal.scss "${CONF_DIR}/backend.scss"
 	ln -sf "$COLORS_FILE" "${CONF_DIR}/colors.scss"
 	ls -la "$CONF_DIR"
 }
-
 generate_firefox_css() {
 	result="$(printf "@-moz-document domain(discordapp.com) {\\n%s\\n}" "$result")"
-
 	[[ "$out_file" == "${OUT_DIR}/style.css" ]] || return
-
 	profiles=(${HOME}/.mozilla/firefox/*.default)
 	[[ -z "${profiles[0]}" ]] && {
 		printf "%s\n" "No firefox profile found! Aborting."
 		exit 1
 	}
-
 	OUT_DIR="${profiles[0]}/chrome"
 	mkdir -p "$OUT_DIR"
 	out_file="${OUT_DIR}/userContent.css"
 }
-
 init() {
 	OPTIND=1
-	while getopts 'hsutxvb:o:' opt; do
+	while getopts 'hsutxfvb:o:' opt; do
 		case "$opt" in
 		h) usage ;;
 		s) out_file="" ;;
@@ -98,23 +87,20 @@ init() {
 		b) set_backend "$OPTARG" ;;
 		u) setup ;;
 		t) VESKTOP_THEME=true ;;
+		f) FLATPAK_VESKTOP=true ;;
 		x) FIREFOX_CSS=true ;;
 		v) version ;;
 		*) ;;
 		esac
 	done
 }
-
 main() {
 	init "$@"
-
 	type -p sassc &>/dev/null || {
 		printf "%s\\n" "sassc is not installed and is required"
 		exit 1
 	}
-
 	[[ ! -d "$CONF_DIR" ]] && setup
-
 	local master
 	master="$(<"${CONF_DIR}/master.scss")"
 	[[ -n "$backend" ]] && {
@@ -122,25 +108,30 @@ main() {
 		bp="backends/${backend}.scss"
 		master="${master/backend.scss/$bp}"
 	}
-
 	local result
 	result="$(sassc -t expanded -I "$CONF_DIR" -s <<<"$master")"
-
 	[[ $VESKTOP_THEME = true ]] && {
 		[[ "$out_file" == "${OUT_DIR}/style.css" && -d "${CONFIG_HOME}/vesktop/themes/" ]] && {
 			out_file="${CONFIG_HOME}/vesktop/themes/wal_thorn.theme.css"
 		}
 	}
-
+	[[ $FLATPAK_VESKTOP = true ]] && {
+		[[ "$out_file" == "${OUT_DIR}/style.css" ]] && {
+			local flatpak_themes_dir="${HOME}/.var/app/dev.vencord.Vesktop/config/vesktop/themes"
+			[[ ! -d "${HOME}/.var/app/dev.vencord.Vesktop" ]] && {
+				printf "%s\n" "Flatpak Vesktop installation not found! Make sure dev.vencord.Vesktop is installed."
+				exit 1
+			}
+			mkdir -p "$flatpak_themes_dir"
+			out_file="${flatpak_themes_dir}/wal_thorn.theme.css"
+		}
+	}
 	[[ $FIREFOX_CSS = true ]] && generate_firefox_css "$result"
-
 	if [[ -n "$out_file" ]]; then
 		mkdir -p "$(dirname "$out_file")"
 		printf "%s\\n" "$result" >"$out_file"
 	else
 		printf "%s\\n" "$result"
 	fi
-
 }
-
 main "$@"
